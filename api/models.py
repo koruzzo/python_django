@@ -1,53 +1,70 @@
+"""..."""
 from django.db import models
+from django.utils.text import slugify
 
-class Club_2(models.Model):
-    code_commune = models.CharField(max_length=500)
-    commune = models.CharField(max_length=500)
-    code_qpv = models.CharField(max_length=500)
-    nom_qpv = models.CharField(max_length=500)
-    departement = models.CharField(max_length=500)
-    region = models.CharField(max_length=500)
-    statut_geo = models.CharField(max_length=500)
-    code = models.CharField(max_length=500)
-    federation = models.CharField(max_length=500)
-    f_1_4_ans = models.CharField(max_length=500)
-    f_5_9_ans = models.CharField(max_length=500)
-    f_10_14_ans = models.CharField(max_length=500)
-    f_15_19_ans = models.CharField(max_length=500)
-    f_20_24_ans = models.CharField(max_length=500)
-    f_25_29_ans = models.CharField(max_length=500)
-    f_30_34_ans = models.CharField(max_length=500)
-    f_35_39_ans = models.CharField(max_length=500)
-    f_40_44_ans = models.CharField(max_length=500)
-    f_45_49_ans = models.CharField(max_length=500)
-    f_50_54_ans = models.CharField(max_length=500)
-    f_55_59_ans = models.CharField(max_length=500)
-    f_60_64_ans = models.CharField(max_length=500)
-    f_65_69_ans = models.CharField(max_length=500)
-    f_70_74_ans = models.CharField(max_length=500)
-    f_75_79_ans = models.CharField(max_length=500)
-    f_80_99_ans = models.CharField(max_length=500)
-    f_nr = models.CharField(max_length=500)
-    h_1_4_ans = models.CharField(max_length=500)
-    h_5_9_ans = models.CharField(max_length=500)
-    h_10_14_ans = models.CharField(max_length=500)
-    h_15_19_ans = models.CharField(max_length=500)
-    h_20_24_ans = models.CharField(max_length=500)
-    h_25_29_ans = models.CharField(max_length=500)
-    h_30_34_ans = models.CharField(max_length=500)
-    h_35_39_ans = models.CharField(max_length=500)
-    h_40_44_ans = models.CharField(max_length=500)
-    h_45_49_ans = models.CharField(max_length=500)
-    h_50_54_ans = models.CharField(max_length=500)
-    h_55_59_ans = models.CharField(max_length=500)
-    h_60_64_ans = models.CharField(max_length=500)
-    h_65_69_ans = models.CharField(max_length=500)
-    h_70_74_ans = models.CharField(max_length=500)
-    h_75_79_ans = models.CharField(max_length=500)
-    h_80_99_ans = models.CharField(max_length=500)
-    h_nr = models.CharField(max_length=500)
-    nr_nr = models.CharField(max_length=500)
-    total = models.CharField(max_length=500)
+class D_Sex(models.Model):
+    """Table de dimension pour le type de sexe."""
+    sex_code = models.CharField(primary_key=True, max_length=1)  # M or F
 
-    def __str__(self):
-        return  f"{self.federation} - {self.commune} - {self.region}"
+class D_AgeGrp(models.Model):
+    """Table de dimension pour les groupes d'âge."""
+    age_label = models.CharField(primary_key=True, max_length=20)  # e.g., "15 à 20 ans, ..."
+
+class D_Date(models.Model):
+    """Table de dimension pour les dates d'insertion."""
+    insert_date = models.DateField(primary_key=True) # Only for F_Club
+
+class D_Type(models.Model):
+    """Table de dimension pour le type."""
+    type_label = models.CharField(primary_key=True, max_length=5)  # e.g., "Club, EPA"
+
+
+
+class D_Federation(models.Model):
+    """Table de dimension pour les fédérations."""
+    fede_id = models.SlugField(primary_key=True, editable=False, max_length=210)    
+    fede_code = models.PositiveIntegerField()
+    fede_label = models.CharField(max_length=100)  # Le nom des fédérations
+
+    def save(self, *args, **kwargs):
+        # Générer l'identifiant fede_id en concaténant fede_code et fede_label
+        self.fede_id = slugify(f"{self.fede_code}-{self.fede_label}")
+        super().save(*args, **kwargs)
+
+
+
+class D_Localisation(models.Model):
+    """Table de dimension pour la localisation."""
+    local_id = models.SlugField(primary_key=True, max_length=200)
+    code_comu = models.CharField(max_length=8)  # Code de la commune (8 chiffres max)
+    code_qpv = models.CharField(max_length=5)  # Code QPV (5 caractères max)
+    region = models.CharField(max_length=100)  # Nom de la région
+    departement = models.CharField(max_length=100)  # Nom du département
+    statut_geo = models.CharField(max_length=100)  # Statut géographique
+    label_qpv = models.CharField(max_length=100)  # Nom du QPV
+    label_comu = models.CharField(max_length=100)  # Nom de la commune
+    
+    def save(self, *args, **kwargs):
+        # Générer l'identifiant local_id en concaténant code_comu et code_qpv
+        self.local_id = slugify(f"{self.code_comu}-{self.code_qpv}")
+        super().save(*args, **kwargs)
+
+
+
+class F_Licence(models.Model):
+    """Table de fait pour les licences."""
+    sex_fk = models.ForeignKey('D_Sex', on_delete=models.CASCADE)  # Clé étrangère vers D_Sex
+    age_fk = models.ForeignKey('D_AgeGrp', on_delete=models.CASCADE)  # Clé étrangère vers D_AgeGrp
+    fede_fk = models.ForeignKey('D_Federation', on_delete=models.CASCADE)  # Clé étrangère vers D_Federation
+    local_fk = models.ForeignKey('D_Localisation', on_delete=models.CASCADE)  # Clé étrangère vers D_Localisation
+    nb_target = models.PositiveIntegerField()  # Nombre cible
+
+
+
+class F_Club(models.Model):
+    """Table de fait pour les clubs."""
+    fede_fk = models.ForeignKey('D_Federation', on_delete=models.CASCADE)  # Clé étrangère vers D_Federation
+    local_fk = models.ForeignKey('D_Localisation', on_delete=models.CASCADE)  # Clé étrangère vers D_Localisation
+    date_fk = models.ForeignKey('D_Date', on_delete=models.CASCADE)  # Clé étrangère vers D_Date
+    type_fk = models.ForeignKey('D_Type', on_delete=models.CASCADE)  # Clé étrangère vers D_Type
+    nb_target = models.PositiveIntegerField()  # Nombre cible

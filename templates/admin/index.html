@@ -1,0 +1,69 @@
+
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <style>
+        .api-links {
+            margin-top: 20px;
+        }
+        .api-links a {
+            display: block;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            color: #343a40;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .api-links a:hover {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+    </style>
+{% endblock %}
+
+{% block sidebar %}
+    {{ block.super }}
+    <div class="sidebar-section">
+        <h2>API Links</h2>
+        <ul class="sidebar-submenu">
+            <li><a href="/api/end-point-dwh/?table=club2">Club2 API</a></li>
+            <li><a href="/api/end-point-dwh/?table=club">Club API</a></li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% load i18n %}
+
+{% block title %}{{ title }} | {% trans 'Administration' %}{% endblock %}
+
+{% block branding %}
+  <h1 id="site-name">{% trans 'My Django Admin' %}</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+  <div id="content-main">
+    <div class="module" id="recent-actions-module">
+      <h2>{% trans 'Recent actions' %}</h2>
+      <ul class="actionlist">
+        {% for action in actions %}
+          <li>{{ action }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="module" id="upcoming-events-module">
+      <h2>{% trans 'Upcoming events' %}</h2>
+      <ul class="eventlist">
+        {% for event in events %}
+          <li>{{ event }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endblock %}

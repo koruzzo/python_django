@@ -1,4 +1,4 @@
-from api.models import Club_2
+from app.models import Club_2
 
 def run():
     Club_2.objects.all().delete()

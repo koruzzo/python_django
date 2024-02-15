@@ -1,8 +1,6 @@
-from os import path
-from django.contrib import admin
 from django.urls import path
 from api.views import EndPointDWH
 
 urlpatterns = [
-    path('',EndPointDWH.as_view())
+    path('api/end-point-dwh/', EndPointDWH.as_view(), name='end-point-dwh'),
 ]

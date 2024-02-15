@@ -18,9 +18,11 @@ from django.contrib import admin
 from django.urls import path, include
 from api import urls as api_urls
 from app.views import index
+from api.views import EndPointDWH
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(api_urls)),
-    path('',index)
+    path('',index),
+    path('api/end-point-dwh/', EndPointDWH.as_view(), name='end-point-dwh')
 ]
