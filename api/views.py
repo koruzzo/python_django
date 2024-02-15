@@ -4,7 +4,7 @@ from rest_framework import serializers
 from rest_framework.response import Response
 # from rest_framework.pagination import PageNumberPagination
 from app.models import Club_2, Club
-from api.models import F_Club, F_Licence
+from api.models import D_AgeGrp, D_Date, D_Federation, D_Localisation, D_Sex, D_Type, F_Club, F_Licence
 
 class EndPointDWH(APIView):
     """..."""
@@ -24,6 +24,24 @@ class EndPointDWH(APIView):
             nombre_de_lignes = queryset.count()
         elif table == 'f_club':
             queryset = F_Club.objects.all()
+            nombre_de_lignes = queryset.count()
+        elif table == 'd_agegrp':
+            queryset = D_AgeGrp.objects.all()
+            nombre_de_lignes = queryset.count()
+        elif table == 'd_date':
+            queryset = D_Date.objects.all()
+            nombre_de_lignes = queryset.count()
+        elif table == 'd_federation':
+            queryset = D_Federation.objects.all()
+            nombre_de_lignes = queryset.count()
+        elif table == 'd_localisation':
+            queryset = D_Localisation.objects.all()
+            nombre_de_lignes = queryset.count()
+        elif table == 'd_sex':
+            queryset = D_Sex.objects.all()
+            nombre_de_lignes = queryset.count()
+        elif table == 'd_type':
+            queryset = D_Type.objects.all()
             nombre_de_lignes = queryset.count()
         else:
             return Response({'message': 'Nom de table invalide'}, status=400)
