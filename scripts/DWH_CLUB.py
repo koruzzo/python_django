@@ -7,27 +7,25 @@ def run():
     """Importe les données des tables app_club et app_club_2 dans la table de fait F_Licence."""
     conn = sqlite3.connect('db.sqlite3')
 
-    # Charger les données de la table app_club avec la condition sur la région
+
     df_app_club = pd.read_sql_query("SELECT * FROM app_club WHERE region = 'Auvergne-Rhône-Alpes'", conn)
 
-    # Créer un dictionnaire pour stocker les objets de clés étrangères
     alltype_dict = {alltype.type_label: alltype for alltype in D_Type.objects.all()}
     date_dict = {date.insert_date.strftime('%Y-%m-%d'): date for date in D_Date.objects.all()}
     fede_dict = {fede.fede_id: fede for fede in D_Federation.objects.all()}
     local_dict = {local.local_id: local for local in D_Localisation.objects.all()}
 
-    # Traiter les données de la table app_club
     clubs_to_create = []
 
     for _, row in df_app_club.iterrows():
         fede_id = row['code'] + '-' + row['federation']
         local_id = row['code_commune'] + '-' + row['code_qpv']
-        insert_date_str = row['date']  # Récupérer la date en tant que chaîne de caractères
+        insert_date_str = row['date']
 
         try:
-            # Convertir la chaîne de caractères en objet datetime
+
             insert_date = datetime.strptime(insert_date_str, '%Y-%m-%d')
-            # Utiliser strftime pour formater la date en tant que clé de recherche
+
             date_key = insert_date.strftime('%Y-%m-%d')
             date = date_dict[date_key]
             fede = fede_dict[fede_id]

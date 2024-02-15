@@ -18,8 +18,7 @@ def run():
     age_dict = {age.age_label: age for age in D_AgeGrp.objects.all()}
     fede_dict = {fede.fede_id: fede for fede in D_Federation.objects.all()}
     local_dict = {local.local_id: local for local in D_Localisation.objects.all()}
-
-    # Traiter les données de la table app_club
+    
     licences_to_create = []
 
     for _, row in df_app_club.iterrows():
@@ -30,13 +29,13 @@ def run():
                 age_label = col[2:]
                 age = age_dict.get(age_label)
                 if sex and age:
-                    fede_id = row['code'] + '-' + row['federation']  # Garder la valeur comme elle est
+                    fede_id = row['code'] + '-' + row['federation']  
                     fede = fede_dict.get(fede_id)
-                    local_id = row['code_commune'] + '-' + row['code_qpv']  # Garder la valeur comme elle est
+                    local_id = row['code_commune'] + '-' + row['code_qpv'] 
                     local = local_dict.get(local_id)
                     if fede and local:
                         nb_target = row[col]
-                        # Ajouter une condition pour éviter les valeurs NULL
+
                         if nb_target is not None:
                             licence = F_Licence(
                                 sex_fk=sex,
@@ -51,7 +50,7 @@ def run():
                     else:
                         print("Erreur: Fédération ou Localisation non trouvée pour :", fede_id, local_id)
 
-    # Traiter les données de la table app_club_2
+
     for _, row in df_app_club_2.iterrows():
         for col in row.index:
             if col.startswith(('f_', 'h_')):
@@ -60,13 +59,13 @@ def run():
                 age_label = col[2:]
                 age = age_dict.get(age_label)
                 if sex and age:
-                    fede_id = row['code'] + '-' + row['federation']  # Garder la valeur comme elle est
+                    fede_id = row['code'] + '-' + row['federation'] 
                     fede = fede_dict.get(fede_id)
-                    local_id = row['code_commune'] + '-' + row['code_qpv']  # Garder la valeur comme elle est
+                    local_id = row['code_commune'] + '-' + row['code_qpv'] 
                     local = local_dict.get(local_id)
                     if fede and local:
                         nb_target = row[col]
-                        # Ajouter une condition pour éviter les valeurs NULL
+                       
                         if nb_target is not None:
                             licence = F_Licence(
                                 sex_fk=sex,
