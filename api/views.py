@@ -13,14 +13,15 @@ class EndPointDWH(APIView):
         table = request.GET['table']
         if table == 'club2':
             queryset = Club_2.objects.all()
-            nombre_de_lignes = queryset.count()
             serializer_class = Club2Serializer
+            nombre_de_lignes = queryset.count()
         elif table == 'club':
             queryset = Club.objects.all()
-            nombre_de_lignes = queryset.count()
             serializer_class = ClubSerializer
+            nombre_de_lignes = queryset.count()
         elif table == 'f_licence':
             queryset = F_Licence.objects.all()
+            serializer_class = FLicenceSerializer
             nombre_de_lignes = queryset.count()
         elif table == 'f_club':
             queryset = F_Club.objects.all()
