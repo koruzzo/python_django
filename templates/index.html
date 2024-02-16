@@ -3,12 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello Page</title>
-    <!-- Bootstrap CSS -->
+    <title>Clubs et Licences</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        /* Ajout de styles personnalisés ici */
-    </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -28,34 +24,85 @@
     </nav>
 
     <div class="container mt-5">
-        <div class="row">
-            <div class="col text-center">
-                <h1 class="display-1">HELLO</h1>
-            </div>
-        </div>
-        <div class="row mt-5">
-            <div class="col">
-                <h2 class="mb-4">Nombre de lignes dans la table Club :</h2>
-                <div class="alert alert-info" role="alert">
-                    {{ club_count }}
-                </div>
-            </div>
-        </div>
-        <div class="row mt-5">
-            <div class="col">
-                <h2>Joueurs :</h2>
-                <ul class="list-group">
-                    {% for my_player in players %}
-                        <li class="list-group-item">{{ my_player.first_name }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-        <div class="row mt-5">
-            <div class="col">
-                <p>{{ ball }}</p>
-            </div>
-        </div>
+        <h1 class="mb-4">Liste des Clubs</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Fédération</th>
+                    <th scope="col">Localisation</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Nombre cible</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for club in clubs_page %}
+                <tr>
+                    <td>{{ club.id }}</td>
+                    <td>{{ club.fede_fk }}</td>
+                    <td>{{ club.local_fk }}</td>
+                    <td>{{ club.date_fk }}</td>
+                    <td>{{ club.type_fk }}</td>
+                    <td>{{ club.nb_target }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if clubs_page.has_other_pages %}
+            <ul class="pagination justify-content-center">
+                {% if clubs_page.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?club_page=1">&laquo;</a></li>
+                    <li class="page-item"><a class="page-link" href="?club_page={{ clubs_page.previous_page_number }}">{{ clubs_page.previous_page_number }}</a></li>
+                {% endif %}
+                <li class="page-item active"><a class="page-link" href="?club_page={{ clubs_page.number }}">{{ clubs_page.number }}</a></li>
+                {% if clubs_page.has_next %}
+                    <li class="page-item"><a class="page-link" href="?club_page={{ clubs_page.next_page_number }}">{{ clubs_page.next_page_number }}</a></li>
+                    <li class="page-item"><a class="page-link" href="?club_page={{ clubs_page.paginator.num_pages }}">&raquo;</a></li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    </div>
+
+    <div class="container mt-5">
+        <h1 class="mb-4">Liste des Licences</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Sexe</th>
+                    <th scope="col">Groupe d'âge</th>
+                    <th scope="col">Fédération</th>
+                    <th scope="col">Localisation</th>
+                    <th scope="col">Nombre cible</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for licence in licences_page %}
+                <tr>
+                    <td>{{ licence.sex_fk }}</td>
+                    <td>{{ licence.age_fk }}</td>
+                    <td>{{ licence.fede_fk }}</td>
+                    <td>{{ licence.local_fk }}</td>
+                    <td>{{ licence.nb_target }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if licences_page.has_other_pages %}
+            <ul class="pagination justify-content-center">
+                {% if licences_page.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?licence_page=1">&laquo;</a></li>
+                    <li class="page-item"><a class="page-link" href="?licence_page={{ licences_page.previous_page_number }}">{{ licences_page.previous_page_number }}</a></li>
+                {% endif %}
+                <li class="page-item active"><a class="page-link" href="?licence_page={{ licences_page.number }}">{{ licences_page.number }}</a></li>
+                {% if licences_page.has_next %}
+                    <li class="page-item"><a class="page-link" href="?licence_page={{ licences_page.next_page_number }}">{{ licences_page.next_page_number }}</a></li>
+                    <li class="page-item"><a class="page-link" href="?licence_page={{ licences_page.paginator.num_pages }}">&raquo;</a></li>
+                {% endif %}
+            </ul>
+        {% endif %}
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
