@@ -8,10 +8,12 @@ def run():
     conn = sqlite3.connect('db.sqlite3')
 
     # Charger les données de la table app_club avec la condition sur la région
-    df_app_club = pd.read_sql_query("SELECT * FROM app_club WHERE region = 'Auvergne-Rhône-Alpes'", conn)
+    df_app_club = pd.read_sql_query("SELECT * FROM app_club WHERE region = 'Auvergne-Rhône-Alpes' AND code_commune != 'NR - Non réparti'", conn)
 
     # Charger les données de la table app_club_2 avec la condition sur la région
-    df_app_club_2 = pd.read_sql_query("SELECT * FROM app_club_2 WHERE region = 'Auvergne-Rhône-Alpes'", conn)
+    df_app_club_2 = pd.read_sql_query("SELECT * FROM app_club_2 WHERE region = 'Auvergne-Rhône-Alpes' AND code_commune != 'NR - Non réparti'", conn)
+
+    df_app_club_2 = df_app_club_2.loc[:, ~df_app_club_2.columns.str.contains('f_nr','h_nr','nr_nr')]
 
     # Créer un dictionnaire pour stocker les objets de clés étrangères
     sex_dict = {sex.sex_code: sex for sex in D_Sex.objects.all()}

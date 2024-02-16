@@ -8,7 +8,7 @@ def run():
     conn = sqlite3.connect('db.sqlite3')
 
 
-    df_app_club = pd.read_sql_query("SELECT * FROM app_club WHERE region = 'Auvergne-Rhône-Alpes'", conn)
+     df_app_club = pd.read_sql_query("SELECT * FROM app_club WHERE region = 'Auvergne-Rhône-Alpes' AND code_commune != 'NR - Non réparti'", conn)
 
     alltype_dict = {alltype.type_label: alltype for alltype in D_Type.objects.all()}
     date_dict = {date.insert_date.strftime('%Y-%m-%d'): date for date in D_Date.objects.all()}
