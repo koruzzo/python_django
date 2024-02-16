@@ -1,5 +1,6 @@
 import sqlite3
 import pandas as pd
+import time
 from api.models import F_Club, D_Type, D_Date, D_Federation, D_Localisation
 from datetime import datetime
 
@@ -8,7 +9,7 @@ def run():
     conn = sqlite3.connect('db.sqlite3')
 
 
-    df_app_club = pd.read_sql_query("SELECT * FROM app_club WHERE region = 'Auvergne-Rhône-Alpes'", conn)
+    df_app_club = pd.read_sql_query("SELECT * FROM app_club WHERE region = 'Auvergne-Rhône-Alpes' AND code_commune != 'NR - Non réparti'", conn)
 
     alltype_dict = {alltype.type_label: alltype for alltype in D_Type.objects.all()}
     date_dict = {date.insert_date.strftime('%Y-%m-%d'): date for date in D_Date.objects.all()}
@@ -16,7 +17,8 @@ def run():
     local_dict = {local.local_id: local for local in D_Localisation.objects.all()}
 
     clubs_to_create = []
-
+    start_time = time.time()
+    
     for _, row in df_app_club.iterrows():
         fede_id = row['code'] + '-' + row['federation']
         local_id = row['code_commune'] + '-' + row['code_qpv']
@@ -59,4 +61,7 @@ def run():
 
     F_Club.objects.bulk_create(clubs_to_create)
 
+    end_time = time.time()
+    execution_time = end_time - start_time
+    print(f"Temps d'exécution: {execution_time} secondes")
     conn.close()

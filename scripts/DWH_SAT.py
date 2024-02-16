@@ -26,7 +26,6 @@ def run():
         D_AgeGrp(age_label='70_74_ans'),
         D_AgeGrp(age_label='75_79_ans'),
         D_AgeGrp(age_label='80_99_ans'),
-        D_AgeGrp(age_label='nr'),
     ])
     D_Type.objects.bulk_create([
         D_Type(type_label='clubs'),
