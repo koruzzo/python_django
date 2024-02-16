@@ -1,6 +1,8 @@
 """..."""
+import stat
 from rest_framework.views import APIView
 from rest_framework import serializers
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from app.models import Club_2, Club
@@ -61,14 +63,13 @@ class EndPointDWH(APIView):
         serializer = serializer_class(paginated_queryset, many=True)
         result = {
             'home' : 'http://localhost:8000/admin',
-            'message': 'OK',
             'nombre_de_lignes': nombre_de_lignes,
             'nom_de_table': table,
             'data': serializer.data,
             'next': paginator.get_next_link(),
             'previous': paginator.get_previous_link()
         }
-        return Response(result)
+        return Response(result, status=status.HTTP_200_OK)
 
 class ClubSerializer(serializers.ModelSerializer):
     """..."""
