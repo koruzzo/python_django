@@ -29,9 +29,9 @@ def run():
                 age_label = col[2:]
                 age = age_dict.get(age_label)
                 if sex and age:
-                    fede_id = row['code'] + '-' + row['federation']  
+                    fede_id = row['code'] + '-' + row['federation']
                     fede = fede_dict.get(fede_id)
-                    local_id = row['code_commune'] + '-' + row['code_qpv'] 
+                    local_id = row['code_commune'] + '-' + row['code_qpv']
                     local = local_dict.get(local_id)
                     if fede and local:
                         nb_target = row[col]

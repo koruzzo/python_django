@@ -22,7 +22,7 @@ TABLE_SERIALIZER_MAP = {
 class EndPointDWH(APIView):
     """..."""
     def get(self, request, format=None):
-        """..."""
+        """Récupérer les données de la table spécifiée."""
         table = request.GET.get('table')
         if table not in TABLE_SERIALIZER_MAP:
             return Response({'message': 'Nom de table invalide'}, status=status.HTTP_400_BAD_REQUEST)
@@ -45,3 +45,69 @@ class EndPointDWH(APIView):
             'previous': paginator.get_previous_link()
         }
         return Response(result, status=status.HTTP_200_OK)
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def delete(self, request, format=None):
+        """Supprimer une entrée de la table spécifiée."""
+        table = request.data.get('table')
+        if table not in TABLE_SERIALIZER_MAP:
+            return Response({'message': 'Nom de table invalide'}, status=status.HTTP_400_BAD_REQUEST)
+
+        model_class, _ = TABLE_SERIALIZER_MAP[table]
+        pk = request.data.get('pk')
+        if pk is None:
+            return Response({'message': 'Veuillez fournir une clé primaire (pk) pour supprimer une entrée'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            instance = model_class.objects.get(pk=pk)
+            instance.delete()
+            return Response({'message': 'L\'entrée a été supprimée avec succès'}, status=status.HTTP_200_OK)
+        except model_class.DoesNotExist:
+            return Response({'message': 'L\'entrée spécifiée n\'existe pas'}, status=status.HTTP_404_NOT_FOUND)
+
+    def patch(self, request, format=None):
+        """Modifier partiellement une entrée dans la table spécifiée."""
+        table = request.data.get('table')
+        if table not in TABLE_SERIALIZER_MAP:
+            return Response({'message': 'Nom de table invalide'}, status=status.HTTP_400_BAD_REQUEST)
+
+        model_class, serializer_class = TABLE_SERIALIZER_MAP[table]
+        pk = request.data.get('pk')
+        if pk is None:
+            return Response({'message': 'Veuillez fournir une clé primaire (pk) pour modifier une entrée'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            instance = model_class.objects.get(pk=pk)
+            serializer = serializer_class(instance, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except model_class.DoesNotExist:
+            return Response({'message': 'L\'entrée spécifiée n\'existe pas'}, status=status.HTTP_404_NOT_FOUND)
+        
+    def post(self, request, format=None):
+        """Insérer une nouvelle entrée dans la table spécifiée."""
+        table = request.data.get('table')
+        if table not in TABLE_SERIALIZER_MAP:
+            return Response({'message': 'Nom de table invalide'}, status=status.HTTP_400_BAD_REQUEST)
+
+        model_class, serializer_class = TABLE_SERIALIZER_MAP[table]
+        serializer = serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
