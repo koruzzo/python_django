@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from app.models import Club_2, Club
-from api.models import D_AgeGrp, D_Date, D_Federation, D_Localisation, D_Sex, D_Type, F_Club, F_Licence
+from api.models import D_AgeGrp, D_Date, D_Federation, D_Localisation, D_Sex, D_Type, F_Club, F_Licence, City
 
 class ClubSerializer(serializers.ModelSerializer):
     """..."""
@@ -63,3 +63,19 @@ class DTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = D_Type
         fields = '__all__'
+
+class CitySerializer(serializers.ModelSerializer):
+    """Serializer pour le modèle City."""
+    class Meta:
+        model = City
+        fields = '__all__'
+
+# class FClubSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = F_Club
+#         fields = '__all__'
+
+# class FLicenceSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = F_Licence
+#         fields = '__all__'

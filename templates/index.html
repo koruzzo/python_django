@@ -70,6 +70,7 @@
         <table class="table table-striped">
             <thead>
                 <tr>
+                    <th scope="col">ID</th>
                     <th scope="col">Sexe</th>
                     <th scope="col">Groupe d'âge</th>
                     <th scope="col">Fédération</th>
@@ -80,6 +81,7 @@
             <tbody>
                 {% for licence in licences_page %}
                 <tr>
+                    <td>{{ licence.id }}</td>
                     <td>{{ licence.sex_fk }}</td>
                     <td>{{ licence.age_fk }}</td>
                     <td>{{ licence.fede_fk }}</td>

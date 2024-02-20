@@ -88,3 +88,11 @@ class F_Club(models.Model):
     def __str__(self):
         """..."""
         return f"{self.nb_target}"
+    
+class City(models.Model):
+    """..."""
+    postal_code = models.CharField(max_length=5, primary_key=True)
+    name = models.CharField(max_length=300)
+    department = models.CharField(max_length=300)
+    region = models.CharField(max_length=300)
+    country = models.CharField(max_length=300)

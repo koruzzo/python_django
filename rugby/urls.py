@@ -19,10 +19,29 @@ from django.urls import path, include
 from api import urls as api_urls
 from app.views import index
 from api.views import EndPointDWH
+# from api.views import D_Sex_DWH
+# from api.views import API_FClub, API_FLicence, CityAPIView, FClubAPIView
+from api.views import CityAPIView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(api_urls)),
-    path('',index),
-    path('api/end-point-dwh/', EndPointDWH.as_view(), name='end-point-dwh')
+    path('', index),
+    
+    path('api/end-point-dwh/', EndPointDWH.as_view(), name='end-point-dwh'),
+    path('api/end-point-dwh/', EndPointDWH.as_view(), name='end-point-dwh'),
+    
+    # path('api/d_sex/<str:sex_code>/', D_Sex_DWH.as_view(), name='d-sex-detail'),
+    
+    # path('api/f_club/', API_FClub.as_view(), name='api-f-club'),
+    # path('api/f_club/<int:id>/', API_FClub.as_view(), name='api-f-club-detail'),
+    
+    # path('f_licence/', API_FLicence.as_view(), name='api-f-licence'),
+    # path('f_licence/<int:id>/', API_FLicence.as_view(), name='api-f-licence-detail'),
+    
+    
+    path('cities/', CityAPIView.as_view(), name='city-list'),
+    path('cities/<str:postal_code>/', CityAPIView.as_view(), name='city-detail'),
 ]
+
+
