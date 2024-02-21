@@ -56,6 +56,7 @@ class D_Localisation(models.Model):
     statut_geo = models.CharField(max_length=100)  # Statut géographique
     label_qpv = models.CharField(max_length=100)  # Nom du QPV
     label_comu = models.CharField(max_length=100)  # Nom de la commune
+    nom_departement = models.CharField(max_length=100, null=True, default=None)  # Nom du departement
     
     def save(self, *args, **kwargs):
         # Générer l'identifiant local_id en concaténant code_comu et code_qpv

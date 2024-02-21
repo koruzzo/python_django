@@ -4,9 +4,12 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 # from rest_framework.generics import get_object_or_404
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from app.models import Club_2, Club
 from api.models import D_AgeGrp, D_Date, D_Federation, D_Localisation, D_Sex, D_Type, F_Club, F_Licence, City
 from .serializers import (ClubSerializer, Club2Serializer, FLicenceSerializer, FClubSerializer, DAgeGrpSerializer, DDateSerializer, DFederationSerializer, DLocalisationSerializer, DSexSerializer, DTypeSerializer, CitySerializer)
+
 
 TABLE_SERIALIZER_MAP = {
     'club2': (Club_2, Club2Serializer),
@@ -22,6 +25,8 @@ TABLE_SERIALIZER_MAP = {
 }
 
 class EndPointDWH(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     """..."""
     def get(self, request, format=None):
         """Récupérer les données de la table spécifiée."""
@@ -79,6 +84,8 @@ class EndPointDWH(APIView):
 
 
 class CityAPIView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = CitySerializer
 
     def get(self, request, postal_code=None):
@@ -143,6 +150,8 @@ class CityAPIView(APIView):
             return Response({"error": "La ville avec ce code postal n'existe pas"}, status=status.HTTP_404_NOT_FOUND)
 
 class FClubAPIView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = FClubSerializer
     pagination_class = PageNumberPagination
     

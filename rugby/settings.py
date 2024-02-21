@@ -28,6 +28,10 @@ STATICFILES_DIRS = [
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
+GOOGLE_MAPS_API_KEY = config('GOOGLE_MAPS_API_KEY')
+DOMAIN = config('DOMAIN')
+PORT = config('PORT')
+API_KEY = config('API_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -44,10 +48,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework.authtoken',
     'api',
     'app',
     'django_extensions',
-    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -134,3 +139,4 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
